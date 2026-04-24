@@ -57,7 +57,7 @@ module tb;
 
     initial begin
         $dumpfile("dump.vcd");
-        $dumpvars(0, tb_cpu);
+        $dumpvars(0, tb);
     end
 
 endmodule

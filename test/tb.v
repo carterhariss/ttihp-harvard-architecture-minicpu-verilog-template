@@ -7,7 +7,7 @@ module tb;
     reg rst_n;
     wire halted;
 
-    cpu_top #(
+    tt_um_cpu_top #(
         .IMEM_DEPTH(10),
         .DMEM_DEPTH(1)
     ) dut (

@@ -390,7 +390,7 @@ module regfile #(
 
 endmodule
 
-module cpu_top #(
+module tt_um_cpu_top #(
     parameter IMEM_DEPTH = 10,
     parameter DMEM_DEPTH = 1
 )(

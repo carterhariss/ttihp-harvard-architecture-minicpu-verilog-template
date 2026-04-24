@@ -1,38 +1,63 @@
 `default_nettype none
-`timescale 1ns / 1ps
+`timescale 1ns/1ps
 
-/* This testbench just instantiates the module and makes some convenient wires
-   that can be driven / tested by the cocotb test.py.
-*/
-module tb ();
+module tb_cpu;
 
-  // Dump the signals to a FST file. You can view it with gtkwave or surfer.
-  initial begin
-    $dumpfile("tb.fst");
-    $dumpvars(0, tb);
-    #1;
-  end
+    reg clk;
+    reg rst_n;
+    wire halted;
 
-  // Wire up the inputs and outputs:
-  reg clk;
-  reg rst_n;
-  reg ena;
-  reg [7:0] ui_in;
-  reg [7:0] uio_in;
-  wire [7:0] uo_out;
-  wire [7:0] uio_out;
-  wire [7:0] uio_oe;
+    cpu_top #(
+        .IMEM_DEPTH(256),
+        .DMEM_DEPTH(256)
+    ) dut (
+        .clk(clk),
+        .rst_n(rst_n),
+        .halted(halted)
+    );
 
-  // Replace tt_um_example with your module name:
-  tt_um_example user_project (
-      .ui_in  (ui_in),    // Dedicated inputs
-      .uo_out (uo_out),   // Dedicated outputs
-      .uio_in (uio_in),   // IOs: Input path
-      .uio_out(uio_out),  // IOs: Output path
-      .uio_oe (uio_oe),   // IOs: Enable path (active high: 0=input, 1=output)
-      .ena    (ena),      // enable - goes high when design is selected
-      .clk    (clk),      // clock
-      .rst_n  (rst_n)     // not reset
-  );
+    // clock: 10 ns period
+    initial begin
+        clk = 1'b0;
+        forever #5 clk = ~clk;
+    end
+
+    // reset
+    initial begin
+        rst_n = 1'b0;
+        #20;
+        rst_n = 1'b1;
+    end
+
+    // timeout protection
+    initial begin
+        #2000;
+        $display("TIMEOUT: simulation did not halt");
+        $finish;
+    end
+
+    // basic monitoring
+    initial begin
+        $display("Starting simulation...");
+        $monitor("t=%0t | pc=%h | halted=%b", $time, dut.pc_q, halted);
+    end
+
+    // finish on halt
+    always @(posedge clk) begin
+        if (halted) begin
+            $display("\nCPU halted.");
+            $display("Register x1 = %0d (0x%08h)", dut.u_rf.regs[1], dut.u_rf.regs[1]);
+            $display("Register x2 = %0d (0x%08h)", dut.u_rf.regs[2], dut.u_rf.regs[2]);
+            $display("Register x3 = %0d (0x%08h)", dut.u_rf.regs[3], dut.u_rf.regs[3]);
+            $display("Register x4 = %0d (0x%08h)", dut.u_rf.regs[4], dut.u_rf.regs[4]);
+            $display("DMEM[0] = %0d (0x%08h)", dut.u_dmem.mem[0], dut.u_dmem.mem[0]);
+            $finish;
+        end
+    end
+
+    initial begin
+        $dumpfile("dump.vcd");
+        $dumpvars(0, tb_cpu);
+    end
 
 endmodule

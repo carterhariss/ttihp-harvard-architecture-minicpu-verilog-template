@@ -8,8 +8,8 @@ module tb;
     wire halted;
 
     cpu_top #(
-        .IMEM_DEPTH(256),
-        .DMEM_DEPTH(256)
+        .IMEM_DEPTH(10),
+        .DMEM_DEPTH(1)
     ) dut (
         .clk(clk),
         .rst_n(rst_n),

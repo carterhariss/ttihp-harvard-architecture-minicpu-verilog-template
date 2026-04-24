@@ -26,7 +26,6 @@ module tb;
         .uio_out(uio_out),  // IOs: Output path
         .uio_oe (uio_oe),   // IOs: Enable path (active high: 0=input, 1=output)
         .ena    (ena),      // enable - goes high when design is selected
-        .halted(halted)
         
     );
 
@@ -58,7 +57,7 @@ module tb;
 
     // finish on halt
     always @(posedge clk) begin
-        if (halted) begin
+        if (ou_out[0]) begin
             $display("\nCPU halted.");
             $display("Register x1 = %0d (0x%08h)", dut.u_rf.regs[1], dut.u_rf.regs[1]);
             $display("Register x2 = %0d (0x%08h)", dut.u_rf.regs[2], dut.u_rf.regs[2]);

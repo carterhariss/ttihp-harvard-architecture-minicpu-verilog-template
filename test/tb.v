@@ -61,3 +61,20 @@ module tb_cpu;
     end
 
 endmodule
+
+// x1 = 5
+// x2 = 7
+// x3 = 12
+// x4 = 12
+// DMEM[0] = 12
+
+// 20010005   ADDI x1, x0, 5      -> x1 = 5
+// 20020007   ADDI x2, x0, 7      -> x2 = 7
+// 00221820   ADD  x3, x1, x2     -> x3 = 12
+// AC030000   SW   x3, 0(x0)      -> DMEM[0] = 12
+// 8C040000   LW   x4, 0(x0)      -> x4 = 12
+// 10640001   BEQ  x3, x4, 1      -> taken, skips next instruction
+// 20010063   ADDI x1, x0, 99     -> skipped
+// 14220001   BNE  x1, x2, 1      -> taken because 5 != 7
+// 20020058   ADDI x2, x0, 88     -> skipped
+// FC000000   HALT

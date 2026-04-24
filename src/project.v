@@ -405,7 +405,7 @@ module tt_um_cpu_top #(
     output halted
     
 );
-    always(*) (ena) begin
+    always @(*) (ena) begin
     // ================= IF STAGE =================
         reg [31:0] pc_q;
         reg [31:0] pc_d;

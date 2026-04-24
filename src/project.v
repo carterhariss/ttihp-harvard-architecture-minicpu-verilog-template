@@ -389,24 +389,41 @@ module regfile #(
     end
 
 endmodule
+module tt_um_cpu_top (
+    input  wire [7:0] ui_in,
+    output wire [7:0] uo_out,
+    input  wire [7:0] uio_in,
+    output wire [7:0] uio_out,
+    output wire [7:0] uio_oe,
+    input  wire       ena,
+    input  wire       clk,
+    input  wire       rst_n
+);
 
-module tt_um_cpu_top #(
+    wire halted;
+
+    cpu_top #(
+        .IMEM_DEPTH(10),
+        .DMEM_DEPTH(1)
+    ) u_cpu (
+        .clk(clk),
+        .rst_n(rst_n),
+        .halted(halted)
+    );
+
+    assign uo_out  = {7'b0, halted};
+    assign uio_out = 8'b0;
+    assign uio_oe  = 8'b0;
+endmodule
+module cpu_top #(
     parameter IMEM_DEPTH = 10,
     parameter DMEM_DEPTH = 1
 )(
     input clk,
     input rst_n,
-    input ena,
-    input[7:0] ui_in,
-    input[7:0] uio_in,
-    output[7:0] uo_out,
-    output[7:0] uio_out,
-    output[7:0] uio_oe,
     output halted
     
 );
-    always @(*) begin
-        if (ena) begin
         // ================= IF STAGE =================
             reg [31:0] pc_q;
             reg [31:0] pc_d;
@@ -418,7 +435,7 @@ module tt_um_cpu_top #(
             
             
             wire rst_n;
-            wire ena;
+          
            
             always @(posedge clk or negedge rst_n) begin
                 if (!rst_n)
@@ -607,7 +624,5 @@ module tt_um_cpu_top #(
             assign rf_waddr = wb_rd;
             assign rf_wdata = wb_wdata;
             assign halted   = wb_valid && wb_halt;
-        end
-    end
 
 endmodule

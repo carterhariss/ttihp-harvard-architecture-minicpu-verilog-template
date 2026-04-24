@@ -7,7 +7,6 @@ from cocotb.triggers import ClockCycles
 
 
 @cocotb.test()
-cocotb.pass_test()
 async def test_project(dut):
     dut._log.info("Start")
 

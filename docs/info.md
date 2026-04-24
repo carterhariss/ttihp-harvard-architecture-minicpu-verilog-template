@@ -9,12 +9,17 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
-
+Verilog 3-stage pipelined Harvard CPU with a 2R/1W register file, datapath/control logic, and separate instruction/data memory. Supports branching and forwarding to handle hazards.
+check out [https://github.com/carterhariss/Harvard-Architecture-Processor](url) for more info.
 ## How to test
 
-Explain how to use your project
+Very limited testing. Not fully functional in the sense of adding instruciton, but for the hardcoded instructions the tb should print
+Register x1 = 5
+Register x2 = 7
+Register x3 = 12
+Register x4 = 12
+DMEM[0] = 12
 
 ## External hardware
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+did not use any external hardware

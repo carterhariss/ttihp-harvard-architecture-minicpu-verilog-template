@@ -389,7 +389,10 @@ module regfile #(
     end
 
 endmodule
-module tt_um_cpu_top (
+module tt_um_cpu_top  #(
+    parameter IMEM_DEPTH = 10,
+    parameter DMEM_DEPTH = 1
+)(
     input  wire [7:0] ui_in,
     output wire [7:0] uo_out,
     input  wire [7:0] uio_in,

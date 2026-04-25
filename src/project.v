@@ -346,7 +346,7 @@ module imem(
 endmodule
 module regfile #(
     parameter WIDTH = 32,
-    parameter NREGS = 32
+    parameter NREGS = 4
 )(
     input clk,
     // write port

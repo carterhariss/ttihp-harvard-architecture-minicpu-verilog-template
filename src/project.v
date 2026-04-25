@@ -431,10 +431,10 @@ module cpu_top #(
             wire stall_if, flush_if;
             wire branch_taken;
             wire [31:0] branch_target;
-            wire clk;
             
             
-            wire rst_n;
+            
+            
           
            
             always @(posedge clk or negedge rst_n) begin
